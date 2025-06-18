@@ -31,6 +31,7 @@ export function MainContent({
           className="h-auto w-full max-w-[60rem] mx-auto px-7"
           style={{
             ...style,
+            // border: '2px solid blue',
           }}
         >
           {children}
@@ -44,19 +45,22 @@ export function MainContent({
       className={cn(
         `grid overflow-y-auto h-full`,
         `overflow-x-auto min-w-[min-content]`,
-        {
-          'items-start content-start': !isCentered && !isDivided && !hasLeftServiceColumn,
-          'grid place-items-center': isCentered,
-          'grid-cols-[1fr_1fr]': isDivided && !hasLeftServiceColumn,
-          'grid-cols-[auto_1fr_1fr]': isDivided && hasLeftServiceColumn,
-          'grid-cols-[auto_1fr]': !isDivided && hasLeftServiceColumn,
-          '': variant === 'default',
-          'grid-cols-[1fr_1fr] grid-rows-[1fr]': variant === 'twoColumns',
-          'content-center justify-items-center pb-10': variant === 'empty',
-        },
+        // {
+        //   'items-start content-start': !isCentered && !isDivided && !hasLeftServiceColumn,
+        //   'grid place-items-center': isCentered,
+        //   'grid-cols-[1fr_1fr]': isDivided && !hasLeftServiceColumn,
+        //   'grid-cols-[auto_1fr_1fr]': isDivided && hasLeftServiceColumn,
+        //   'grid-cols-[auto_1fr]': !isDivided && hasLeftServiceColumn,
+        //   '': variant === 'default',
+        //   'grid-cols-[1fr_1fr] grid-rows-[1fr]': variant === 'twoColumns',
+        //   'content-center justify-items-center pb-10': variant === 'empty',
+        // },
         className,
       )}
-      style={{ ...style }}
+      style={{
+        ...style,
+        //  border: '3px dashed red'
+      }}
     >
       {children}
     </div>

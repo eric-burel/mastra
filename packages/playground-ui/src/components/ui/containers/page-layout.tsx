@@ -11,8 +11,8 @@ export function PageLayout({
 }) {
   return (
     <div
-      className={cn(`h-screen bg-surface1 font-sans grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]`, className)}
-      style={style}
+      className={cn(`h-screen bg-black font-sans grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]`, className)}
+      style={{ ...style }}
     >
       {children}
     </div>

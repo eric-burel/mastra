@@ -4,4 +4,3 @@ export * from './page-layout';
 export * from './main-header';
 export * from './main-layout';
 export * from './main-content';
-export * from './main-empty';

@@ -10,10 +10,7 @@ export function PageHeader({
   style?: React.CSSProperties;
 }) {
   return (
-    <header
-      className={cn(`px-4 py-3 col-span-2 border-border1 border-b-sm flex justify-between items-center`, className)}
-      style={style}
-    >
+    <header className={cn(`px-2 py-1 col-span-2  flex justify-between items-center`, className)} style={style}>
       {children}
     </header>
   );

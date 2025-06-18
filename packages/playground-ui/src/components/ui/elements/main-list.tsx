@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { MainListEmpty } from '../fragments/main-list-empty';
 
 type Column = {
   key: string;
@@ -21,15 +22,32 @@ type MainListProps = {
   className?: string;
   style?: React.CSSProperties;
   linkComponent?: any;
+  emptyStateFor?: 'networks' | 'agents';
+  isLoading?: boolean;
 };
 
-export function MainList({ className, style, items, columns, linkComponent }: MainListProps) {
+export function MainList({ className, style, items, columns, linkComponent, emptyStateFor, isLoading }: MainListProps) {
   const LinkComponent = linkComponent || 'a';
+  const emptyStateDefined = emptyStateFor && ['networks', 'agents'].includes(emptyStateFor);
 
-  console.log({ items, columns });
+  if (isLoading) {
+    return 'Loading...';
+  } else if (items && items.length === 0) {
+    return emptyStateDefined ? (
+      <div className="grid h-full justify-center items-center">
+        <MainListEmpty predefinedFor="networks" className={className} style={style} />
+      </div>
+    ) : null;
+  }
 
   return (
-    <ul className={cn(``, className)} style={style}>
+    <ul
+      className={cn(``, className)}
+      style={{
+        ...style,
+        // border: '2px solid green'
+      }}
+    >
       <li className="font-semibold text-[0.875rem] text-text2 px-2 py-3 border-b-sm border-border1 flex">
         <span>Name</span>
         {columns?.length && (

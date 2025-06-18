@@ -2,25 +2,23 @@ import { cn } from '@/lib/utils';
 
 export function MainLayout({
   children,
-  variant = 'default',
   className,
   style,
 }: {
   children: React.ReactNode;
-  variant?: 'default' | '2x2grid';
   className?: string;
   style?: React.CSSProperties;
 }) {
   return (
     <main
       className={cn(
-        `grid grid-rows-[auto_1fr] overflow-y-auto h-full px-8`,
-        {
-          'grid-cols-[1fr_1fr] grid-rows-[auto_1fr] gap-x-12 gap-y-12 px-10': variant === '2x2grid',
-        },
+        'bg-surface2 mb-3 mr-3 rounded-lg border border-border1 overflow-y-auto grid grid-rows-[auto_1fr] ',
         className,
       )}
-      style={{ ...style }}
+      style={{
+        ...style,
+        //  border: '2px solid red'
+      }}
     >
       {children}
     </main>

@@ -12,7 +12,7 @@ import {
   MainLayout,
   MainContent,
   MainHeader,
-  MainEmpty,
+  MainHeaderTitle,
   MainList,
 } from '@mastra/playground-ui';
 
@@ -22,7 +22,6 @@ import { useAgents } from '@/hooks/use-agents';
 import { agentsTableColumns } from '@/domains/agents/table.columns';
 import { useNavigate } from 'react-router';
 import { useNewUI } from '@/hooks/use-new-ui';
-import { max } from 'date-fns';
 
 function Agents() {
   const navigate = useNavigate();
@@ -36,10 +35,6 @@ function Agents() {
     provider: agent?.provider,
     modelId: agent?.modelId,
   }));
-
-  console.log({ agentListData });
-
-  if (isLoading) return null;
 
   const hasAgents = agentListData.length > 0;
 
@@ -59,17 +54,18 @@ function Agents() {
 
   return newUIEnabled ? (
     <MainLayout>
-      <MainHeader variant="forList">
-        <AgentIcon /> Agents
+      <MainHeader>
+        <MainHeaderTitle>Agents</MainHeaderTitle>
       </MainHeader>
-
-      {hasAgents ? (
-        <MainContent variant="list">
-          <MainList items={agentListItems} linkComponent={Link} columns={agentListColumns} />
-        </MainContent>
-      ) : (
-        <MainEmpty predefinedFor="agents" />
-      )}
+      <MainContent>
+        <MainList
+          items={agentListItems}
+          linkComponent={Link}
+          columns={agentListColumns}
+          emptyStateFor="agents"
+          isLoading={isLoading}
+        />
+      </MainContent>
     </MainLayout>
   ) : (
     <MainContentLayout>
