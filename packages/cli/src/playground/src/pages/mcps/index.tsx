@@ -15,6 +15,11 @@ import {
   WorkflowIcon,
   MainContentLayout,
   MainContentContent,
+  MainLayout,
+  MainContent,
+  MainHeader,
+  MainHeaderTitle,
+  MainList,
 } from '@mastra/playground-ui';
 
 import { useMCPServers } from '@/hooks/use-mcp-servers';
@@ -24,6 +29,8 @@ import { client } from '@/lib/client';
 import { ServerInfo } from '@mastra/core/mcp';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useNewUI } from '@/hooks/use-new-ui';
+import { de } from 'date-fns/locale';
 
 const McpServerRow = ({ server }: { server: ServerInfo }) => {
   const { tools, isLoading } = useMCPServerTools(server);
@@ -100,18 +107,49 @@ const McpServerRow = ({ server }: { server: ServerInfo }) => {
 
 const MCPs = () => {
   const { servers, isLoading } = useMCPServers();
+  const newUIEnabled = useNewUI();
+  const effectiveBaseUrl = client.options.baseUrl || 'http://localhost:4111';
 
   const mcpServers = servers ?? [];
 
-  if (isLoading) return null;
+  console.log('MCP Servers:', mcpServers);
 
-  return (
+  const mcpServerListItems = mcpServers.map(server => ({
+    id: server.id,
+    name: server.name,
+    to: `/mcps/${server.id}`,
+    description: `${effectiveBaseUrl}/api/mcp/${server.id}/sse`,
+    columns: [
+      <>
+        <AgentIcon />
+      </>,
+    ],
+  }));
+
+  const mcpServerListColumns = [{ key: 'actions', label: 'Actions', minWidth: '10rem', maxWidth: '15rem' }];
+
+  return newUIEnabled ? (
+    <MainLayout>
+      <MainHeader>
+        <MainHeaderTitle>Networks</MainHeaderTitle>
+      </MainHeader>
+      <MainContent>
+        <MainList
+          items={mcpServerListItems}
+          linkComponent={Link}
+          columns={mcpServerListColumns}
+          emptyStateFor="networks"
+          isLoading={isLoading}
+        />
+      </MainContent>
+    </MainLayout>
+  ) : (
     <MainContentLayout>
       <Header>
         <HeaderTitle>MCP Servers</HeaderTitle>
       </Header>
 
-      {mcpServers.length === 0 ? (
+      {mcpServers.length === 1 ? (
         <MainContentContent isCentered={true}>
           <EmptyState
             iconSlot={<McpCoinIcon />}

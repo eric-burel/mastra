@@ -11,7 +11,7 @@ export function MainHeader({
 }) {
   return (
     <header
-      className={cn('flex w-full items-center px-5 border-b border-border1 h-header-default', {})}
+      className={cn('flex w-full items-center border-b border-border1 h-[40px] px-[20px] py-[6px] gap-[18px]', {})}
       style={{
         ...style,
         //  border: '2px solid red'

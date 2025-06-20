@@ -28,6 +28,8 @@ function Agents() {
   const { agents, isLoading } = useAgents();
   const newUIEnabled = useNewUI();
 
+  console.log('Agents:', agents);
+
   const agentListData = Object.entries(agents).map(([key, agent]) => ({
     id: key,
     name: agent.name,
@@ -40,8 +42,10 @@ function Agents() {
 
   const agentListItems = agentListData.map(agent => ({
     id: agent.id,
+    icon: <AgentIcon />,
     name: agent.name,
     to: `/agents/${agent.id}/chat`,
+    description: agent.description,
     columns: [
       <>
         <AgentIcon />

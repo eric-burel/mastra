@@ -41,8 +41,6 @@ function Workflows() {
     isLegacy: false,
   }));
 
-  if (isLoading) return null;
-
   const allWorkflows = [...workflowList, ...legacyWorkflowList];
 
   const workflowListItems = allWorkflows.map(workflow => ({
@@ -65,7 +63,13 @@ function Workflows() {
         <MainHeaderTitle>Workflows</MainHeaderTitle>
       </MainHeader>
       <MainContent>
-        <MainList items={workflowListItems} linkComponent={Link} columns={workflowListColumns} />
+        <MainList
+          items={workflowListItems}
+          linkComponent={Link}
+          columns={workflowListColumns}
+          isLoading={isLoading}
+          emptyStateFor="workflows"
+        />
       </MainContent>
     </MainLayout>
   ) : (

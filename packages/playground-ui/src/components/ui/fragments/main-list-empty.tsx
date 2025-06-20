@@ -1,7 +1,15 @@
 import { ReactNode } from 'react';
 
 import { Txt } from '../../../ds/components/Txt';
-import { AgentCoinIcon, WorkflowCoinIcon, AgentIcon, WorkflowIcon, AgentNetworkCoinIcon } from '@/ds/icons';
+import {
+  AgentCoinIcon,
+  WorkflowCoinIcon,
+  AgentIcon,
+  WorkflowIcon,
+  AgentNetworkCoinIcon,
+  McpServerIcon,
+  McpCoinIcon,
+} from '@/ds/icons';
 import { NetworkIcon } from 'lucide-react';
 import { Button } from '../../../ds/components/Button';
 import { cn } from '@/lib/utils';
@@ -40,6 +48,18 @@ const predefinedContent = {
         label: 'Docs',
         href: 'https://mastra.ai/en/reference/networks/agent-network',
         icon: <NetworkIcon />,
+      },
+    ],
+  },
+  mcpServers: {
+    icon: <McpCoinIcon />,
+    title: 'Configure MCP servers',
+    description: 'MCP servers are not configured yet. You can find more information in the documentation.',
+    actions: [
+      {
+        label: 'Docs',
+        href: 'https://mastra.ai/en/docs/getting-started/mcp-docs-server',
+        icon: <McpServerIcon />,
       },
     ],
   },
