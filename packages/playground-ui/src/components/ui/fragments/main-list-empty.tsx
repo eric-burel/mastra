@@ -109,7 +109,7 @@ export const MainListEmpty = ({
       {actions && actions.length > 0 && (
         <div className="flex flex-col items-center gap-4 pt-9 w-full">
           {actions.map((action, index) => (
-            <Button size="lg" className="w-full" variant="light" as="a" href={action.href} target="_blank">
+            <Button size="lg" className="w-full" variant="light" as="a" href={action.href}>
               {action.icon}
               {action.label}
             </Button>
