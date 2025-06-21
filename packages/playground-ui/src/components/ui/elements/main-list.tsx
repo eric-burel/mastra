@@ -1,6 +1,8 @@
 import { cn } from '@/lib/utils';
 import { MainListEmpty } from '../fragments/main-list-empty';
-import { TextWithIcon } from './text-with-icon';
+import { predefinedEmptyListContent } from '../fragments/main-list-empty';
+import { useState, useEffect } from 'react';
+import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 
 type Column = {
   key: string;
@@ -16,6 +18,7 @@ type Item = {
   to: string;
   description?: string;
   columns?: React.ReactNode[];
+  collapsible?: React.ReactNode;
 };
 
 type MainListProps = {
@@ -24,15 +27,16 @@ type MainListProps = {
   className?: string;
   style?: React.CSSProperties;
   linkComponent?: any;
-  emptyStateFor?: 'networks' | 'agents' | 'mcpServers' | 'workflows';
+  emptyStateFor?: 'networks' | 'agents' | 'mcpServers' | 'workflows' | 'tools';
   isLoading?: boolean;
 };
 
-export function MainList({ className, style, items, columns, linkComponent, emptyStateFor, isLoading }: MainListProps) {
-  const LinkComponent = linkComponent || 'a';
-  const emptyStateDefined = emptyStateFor && ['networks', 'agents', 'workflows', 'mcpServers'].includes(emptyStateFor);
+const DEFAULT_COLUMN_MIN_WIDTH = '10rem';
+const DEFAULT_COLUMN_MAX_WIDTH = '15rem';
 
-  console.log('emptyStateDefined', emptyStateDefined);
+export function MainList({ className, style, items, columns, linkComponent, emptyStateFor, isLoading }: MainListProps) {
+  const eligibleEmptyStateForValue = Object.keys(predefinedEmptyListContent);
+  const emptyStateDefined = emptyStateFor && eligibleEmptyStateForValue.includes(emptyStateFor);
 
   if (isLoading) {
     return 'Loading...';
@@ -52,46 +56,111 @@ export function MainList({ className, style, items, columns, linkComponent, empt
         // border: '2px solid green'
       }}
     >
-      <li className="items-center h-table-header border-b-sm border-border1 flex text-icon3 text-ui-sm font-normal uppercase px-5">
+      <li className="items-center h-table-header border-b-sm border-border1 flex text-icon3 text-[11px] font-normal uppercase px-5">
         <span>Name</span>
-        {columns?.length && (
-          <div className="ml-auto">
-            {columns?.map(column => (
-              <span className={cn(`flex min-w-[10rem] text-left w-[10rem]`)}>{column.label}</span>
-            ))}
+        {columns && columns?.length > 0 && (
+          <div
+            className={cn('ml-auto flex gap-2 items-center', {
+              'pr-[35px]': items && items.length > 0 && items[0].collapsible,
+            })}
+          >
+            {columns?.map(column => {
+              return (
+                <span
+                  className={cn(`flex text-left`)}
+                  style={{
+                    minWidth: column.minWidth || DEFAULT_COLUMN_MIN_WIDTH,
+                    maxWidth: column.maxWidth || DEFAULT_COLUMN_MAX_WIDTH,
+                  }}
+                >
+                  {column.label}
+                </span>
+              );
+            })}
           </div>
         )}
       </li>
 
       {items?.map(item => {
-        const { id, name, to, description, columns } = item;
+        const { id, name, to, description, columns: itemColumns, collapsible } = item;
 
         if (!id || !name || !to) {
           console.warn('Item is missing required properties:', item);
           return null;
         }
 
-        return (
-          <li key={id} className="px-5 min-h-[44px] items-center flex border-b-sm border-border1 hover:bg-surface3">
-            <LinkComponent to={to} className="flex gap-2 items-center w-full ">
-              <div className="flex gap-2 items-center">
-                {item.icon}
-                <div className="py-1">
-                  <span className="text-icon6 font-medium text-ui-md leading-ui-md">{item.name}</span>
-                  {item.description && (
-                    <p className="truncate max-w-[100ch] text-icon3 text-ui-xs text-[0.875rem] pb-1 ">
-                      {item.description}
-                    </p>
-                  )}
-                </div>
-              </div>
-              {columns?.length && (
-                <div className="ml-auto">{columns?.map(column => <TextWithIcon>{column}</TextWithIcon>)}</div>
-              )}
-            </LinkComponent>
-          </li>
-        );
+        return <MainListItem item={item} linkComponent={linkComponent} listColumns={columns} />;
       })}
     </ul>
+  );
+}
+
+type MainListItemProps = {
+  item: Item;
+  linkComponent?: any;
+  listColumns?: Column[];
+};
+
+export function MainListItem({ item, linkComponent, listColumns = [] }: MainListItemProps) {
+  const LinkComponent = linkComponent || 'a';
+  const [collapsed, setCollapsed] = useState(true);
+
+  return (
+    <li key={item.id} className="grid px-5 min-h-[44px] items-center border-b-sm border-border1 hover:bg-surface3">
+      <LinkComponent to={item.to} className="flex gap-2 items-center w-full ">
+        <div className="flex gap-2 items-center group [&>svg]:w-[20px] [&>svg]:h-[20px]">
+          {item.icon}
+          <div className="py-1">
+            <span className="text-icon6 font-medium text-[12px]">{item.name}</span>
+            {item.description && (
+              <p className="truncate max-w-[80ch] text-icon3 text-[10px] pb-1 ">{item.description}</p>
+            )}
+          </div>
+        </div>
+        <div className="ml-auto flex gap-2 items-center">
+          {item.columns && item.columns?.length > 0 && (
+            <div className="ml-auto flex gap-2 items-center">
+              {item.columns?.map((itemColumn, idx) => (
+                <div
+                  className={cn(
+                    'flex justify-start items-center gap-1 text-[11px] text-left',
+                    '[&>*]:flex [&>*]:items-center [&>*]:justify-start [&>*]:gap-1',
+                    '[&_svg]:w-[12px] [&_svg]:h-[12px] [&_svg]:text-icon3',
+                  )}
+                  style={{
+                    minWidth: listColumns[idx].minWidth || DEFAULT_COLUMN_MIN_WIDTH,
+                    maxWidth: listColumns[idx].maxWidth || DEFAULT_COLUMN_MAX_WIDTH,
+                  }}
+                >
+                  {itemColumn}
+                </div>
+              ))}
+            </div>
+          )}
+          {item.collapsible && (
+            <button
+              className="ml-2 text-icon3 hover:text-icon6 transition-colors"
+              onClick={e => {
+                e.preventDefault();
+                setCollapsed(!collapsed);
+              }}
+            >
+              <ChevronDownIcon
+                className={cn('w-4 h-4 transition-transform', { 'rotate-180': !collapsed, 'rotate-0': collapsed })}
+              />
+            </button>
+          )}
+        </div>
+      </LinkComponent>
+      {item.collapsible && !collapsed && (
+        <div
+          className={cn({
+            'ml-7 mb-2': item.icon,
+          })}
+        >
+          {item.collapsible}
+        </div>
+      )}
+    </li>
   );
 }

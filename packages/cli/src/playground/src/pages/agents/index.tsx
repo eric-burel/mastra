@@ -14,6 +14,7 @@ import {
   MainHeader,
   MainHeaderTitle,
   MainList,
+  getProviderIcon,
 } from '@mastra/playground-ui';
 
 import { Link } from 'react-router';
@@ -40,19 +41,23 @@ function Agents() {
 
   const hasAgents = agentListData.length > 0;
 
-  const agentListItems = agentListData.map(agent => ({
-    id: agent.id,
-    icon: <AgentIcon />,
-    name: agent.name,
-    to: `/agents/${agent.id}/chat`,
-    description: agent.description,
-    columns: [
-      <>
-        <AgentIcon />
-        {agent?.modelId}
-      </>,
-    ],
-  }));
+  const agentListItems = agentListData.map(agent => {
+    const providerIcon = getProviderIcon(agent.provider) || null;
+
+    return {
+      id: agent.id,
+      icon: <AgentIcon />,
+      name: agent.name,
+      to: `/agents/${agent.id}/chat`,
+      description: agent.description,
+      columns: [
+        <>
+          {providerIcon}
+          {agent?.modelId}
+        </>,
+      ],
+    };
+  });
 
   const agentListColumns = [{ key: 'model', label: 'Model', minWidth: '10rem', maxWidth: '15rem' }];
 

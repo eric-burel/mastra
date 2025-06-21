@@ -15,8 +15,8 @@ import {
   MainHeader,
   MainHeaderTitle,
   MainList,
-  AgentIcon,
 } from '@mastra/playground-ui';
+import { Footprints } from 'lucide-react';
 import { workflowsTableColumns } from '@/domains/workflows/table.columns';
 import { useNavigate } from 'react-router';
 import { useNewUI } from '@/hooks/use-new-ui';
@@ -47,10 +47,11 @@ function Workflows() {
   const workflowListItems = allWorkflows.map(workflow => ({
     id: workflow.id,
     name: workflow.name,
+    icon: <WorkflowIcon />,
     to: `/workflows${workflow.isLegacy ? '/legacy' : ''}/${workflow.id}/graph`,
     columns: [
       <>
-        <AgentIcon />
+        <Footprints />
         {workflow.stepsCount} steps
       </>,
     ],

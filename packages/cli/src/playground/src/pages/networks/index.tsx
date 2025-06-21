@@ -13,8 +13,8 @@ import {
   MainHeader,
   MainHeaderTitle,
   MainList,
-  AgentIcon,
 } from '@mastra/playground-ui';
+import { UsersIcon, BrainIcon } from 'lucide-react';
 import { useNetworks } from '@/hooks/use-networks';
 import { networksTableColumns } from '@/domains/networks/table.columns';
 import { NetworkIcon } from 'lucide-react';
@@ -28,19 +28,27 @@ function Networks() {
 
   console.log('Networks:', networks);
 
+  const networkListColumns = [
+    { key: 'agents', label: 'Agents', minWidth: '6rem' },
+    { key: 'routingModel', label: 'Routing Model' },
+  ];
+
   type Network = GetNetworkResponse & { id: string };
   const networkListItems = (networks as Network[]).map(network => ({
     id: network.id,
+    icon: <NetworkIcon />,
     name: network.name,
+    description: network.instructions,
     to: `/networks/${network.id}/chat`,
     columns: [
       <>
-        <AgentIcon />
+        <UsersIcon /> {network.agents.length}
+      </>,
+      <>
+        <BrainIcon /> {network.routingModel.modelId}
       </>,
     ],
   }));
-
-  const networkListColumns = [{ key: 'actions', label: 'Actions', minWidth: '10rem', maxWidth: '15rem' }];
 
   return newUIEnabled ? (
     <MainLayout>

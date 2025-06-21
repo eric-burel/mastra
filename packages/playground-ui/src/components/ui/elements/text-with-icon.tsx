@@ -12,8 +12,8 @@ export function TextWithIcon({
   return (
     <div
       className={cn(
-        'flex justify-start text-icon3 items-center gap-1 text-ui-sm w-[10rem] text-left',
-        '[&>svg]:h-icon-default [&>svg]:w-icon-default',
+        'flex justify-start items-center gap-1 text-[11px] text-left',
+        '[&>svg]:w-[12px] [&>svg]:h-[12px] [&>svg]:text-icon3',
         className,
       )}
       style={{

@@ -30,7 +30,6 @@ import { ServerInfo } from '@mastra/core/mcp';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useNewUI } from '@/hooks/use-new-ui';
-import { de } from 'date-fns/locale';
 
 const McpServerRow = ({ server }: { server: ServerInfo }) => {
   const { tools, isLoading } = useMCPServerTools(server);

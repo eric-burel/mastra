@@ -9,12 +9,13 @@ import {
   AgentNetworkCoinIcon,
   McpServerIcon,
   McpCoinIcon,
+  ToolsIcon,
 } from '@/ds/icons';
 import { NetworkIcon } from 'lucide-react';
 import { Button } from '../../../ds/components/Button';
 import { cn } from '@/lib/utils';
 
-const predefinedContent = {
+export const predefinedEmptyListContent = {
   agents: {
     icon: <AgentCoinIcon />,
     title: 'Configure Agents',
@@ -63,6 +64,18 @@ const predefinedContent = {
       },
     ],
   },
+  tools: {
+    icon: <AgentCoinIcon />,
+    title: 'Configure Tools',
+    description: 'Mastra tools are not configured yet. You can find more information in the documentation.',
+    actions: [
+      {
+        label: 'Docs',
+        href: 'https://mastra.ai/en/docs/agents/using-tools-and-mcp',
+        icon: <ToolsIcon />,
+      },
+    ],
+  },
 };
 
 type Action = {
@@ -76,7 +89,7 @@ export type MainEmptyProps = {
   title?: ReactNode;
   description?: ReactNode;
   actions?: Action[];
-  predefinedFor?: keyof typeof predefinedContent;
+  predefinedFor?: keyof typeof predefinedEmptyListContent;
   className?: string;
   style?: React.CSSProperties;
   children?: ReactNode;
@@ -92,7 +105,7 @@ export const MainListEmpty = ({
   predefinedFor,
   children,
 }: MainEmptyProps) => {
-  const content = predefinedFor ? predefinedContent[predefinedFor] : null;
+  const content = predefinedFor ? predefinedEmptyListContent[predefinedFor] : null;
   const icon = content?.icon || customIcon;
   const title = content?.title || customTitle;
   const description = content?.description || customDescription;
