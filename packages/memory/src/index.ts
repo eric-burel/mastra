@@ -631,8 +631,6 @@ export class Memory extends MastraMemory {
   public async getUserContextMessage({ threadId }: { threadId: string }) {
     const workingMemory = await this.getWorkingMemory({ threadId });
 
-    this.logger.debug('Working memory', { workingMemory });
-
     if (!workingMemory) {
       return null;
     }
