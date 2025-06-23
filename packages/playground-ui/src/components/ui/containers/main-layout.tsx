@@ -12,12 +12,13 @@ export function MainLayout({
   return (
     <main
       className={cn(
-        'bg-surface2 mb-3 mr-3 rounded-lg border border-border1 overflow-y-auto grid grid-rows-[auto_1fr] ',
+        'bg-surface2 rounded-[6px] border border-border1 overflow-y-auto grid grid-rows-[auto_1fr]',
+        // hack to cover the PageLayout border instead of aligning with it
+        'translate-x-[1px] translate-y-[1px]',
         className,
       )}
       style={{
         ...style,
-        //  border: '2px solid red'
       }}
     >
       {children}

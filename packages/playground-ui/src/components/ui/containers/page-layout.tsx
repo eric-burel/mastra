@@ -12,10 +12,12 @@ export function PageLayout({
   return (
     <div
       className={cn(
-        `h-[calc(100vh-16px)] bg-[#0A0A0A] font-sans grid grid-cols-[auto_1fr] grid-rows-[auto_1fr] border border-surface4  m-[8px] rounded-[10px]`,
+        `h-[calc(100vh-16px)] bg-[#0A0A0A] border-[1px] border-[#1A1A1A] font-sans grid grid-cols-[auto_1fr] grid-rows-[auto_1fr] m-[8px] rounded-[10px]`,
         className,
       )}
-      style={{ ...style }}
+      style={{
+        ...style,
+      }}
     >
       {children}
     </div>

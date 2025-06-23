@@ -1,8 +1,8 @@
 import { cn } from '@/lib/utils';
 import { MainListEmpty } from '../fragments/main-list-empty';
 import { predefinedEmptyListContent } from '../fragments/main-list-empty';
-import { useState, useEffect } from 'react';
-import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { useState } from 'react';
+import { ChevronDownIcon } from 'lucide-react';
 
 type Column = {
   key: string;
@@ -39,8 +39,10 @@ export function MainList({ className, style, items, columns, linkComponent, empt
   const emptyStateDefined = emptyStateFor && eligibleEmptyStateForValue.includes(emptyStateFor);
 
   if (isLoading) {
-    return 'Loading...';
-  } else if (items && items.length === 0) {
+    return <MainListLoading columns={columns} />;
+  }
+
+  if (!isLoading && items && items.length === 0) {
     return emptyStateDefined ? (
       <div className="grid h-full justify-center items-center">
         <MainListEmpty predefinedFor={emptyStateFor} className={className} style={style} />
@@ -49,37 +51,8 @@ export function MainList({ className, style, items, columns, linkComponent, empt
   }
 
   return (
-    <ul
-      className={cn(``, className)}
-      style={{
-        ...style,
-        // border: '2px solid green'
-      }}
-    >
-      <li className="items-center h-table-header border-b-sm border-border1 flex text-icon3 text-[11px] font-normal uppercase px-5">
-        <span>Name</span>
-        {columns && columns?.length > 0 && (
-          <div
-            className={cn('ml-auto flex gap-2 items-center', {
-              'pr-[35px]': items && items.length > 0 && items[0].collapsible,
-            })}
-          >
-            {columns?.map(column => {
-              return (
-                <span
-                  className={cn(`flex text-left`)}
-                  style={{
-                    minWidth: column.minWidth || DEFAULT_COLUMN_MIN_WIDTH,
-                    maxWidth: column.maxWidth || DEFAULT_COLUMN_MAX_WIDTH,
-                  }}
-                >
-                  {column.label}
-                </span>
-              );
-            })}
-          </div>
-        )}
-      </li>
+    <ul className={cn(``, className)} style={style}>
+      <MainListHeader columns={columns} items={items} />
 
       {items?.map(item => {
         const { id, name, to, description, columns: itemColumns, collapsible } = item;
@@ -92,6 +65,100 @@ export function MainList({ className, style, items, columns, linkComponent, empt
         return <MainListItem item={item} linkComponent={linkComponent} listColumns={columns} />;
       })}
     </ul>
+  );
+}
+
+type MainListLoadingProps = {
+  columns?: Column[];
+  items?: Item[];
+  className?: string;
+  style?: React.CSSProperties;
+  withCollapsible?: boolean;
+};
+
+function MainListLoading({ columns, items, className, style, withCollapsible }: MainListLoadingProps) {
+  return (
+    <ul className={cn(``, className)} style={style}>
+      <MainListHeader columns={columns} items={items} />
+      {Array.from({ length: 3 }).map((_, rowIdx) => (
+        <li key={rowIdx} className="grid px-5 min-h-[44px] items-center border-b-sm border-border1 hover:bg-surface3">
+          <div className="flex gap-2 items-center w-full ">
+            <div className="flex gap-2 items-center w-full">
+              <div
+                className={cn('text-icon6 font-medium h-[12px] rounded-md w-[50%] bg-surface5 animate-pulse', {
+                  'w-[30%] opacity-80': rowIdx === 1,
+                  'w-[40%] opacity-60': rowIdx === 2,
+                })}
+              ></div>
+            </div>
+            <div className="ml-auto flex gap-2 items-center">
+              {columns && columns?.length > 0 && (
+                <div className="ml-auto flex gap-2 items-center">
+                  {columns?.map(column => (
+                    <div
+                      className={cn(
+                        'text-icon6 font-medium h-[12px] rounded-md ',
+                        '[&>*]:flex [&>*]:items-center [&>*]:justify-start [&>*]:gap-1',
+                      )}
+                      style={{
+                        minWidth: column.minWidth || DEFAULT_COLUMN_MIN_WIDTH,
+                        maxWidth: column.maxWidth || DEFAULT_COLUMN_MAX_WIDTH,
+                      }}
+                    >
+                      <div
+                        className={cn('text-icon6 font-medium rounded-md w-[30%] h-[12px] animate-pulse bg-surface5', {
+                          'w-[50%] opacity-80': rowIdx === 1,
+                          'w-[40%] opacity-60': rowIdx === 2,
+                        })}
+                      ></div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+type MainListHeaderProps = {
+  columns?: Column[];
+  items?: Item[];
+  className?: string;
+  style?: React.CSSProperties;
+  withCollapsible?: boolean;
+};
+
+export function MainListHeader({ columns, className, style, withCollapsible }: MainListHeaderProps) {
+  console.log({ columns });
+
+  return (
+    <li className="items-center h-table-header border-b-sm border-border1 flex text-icon3 text-[11px] font-normal uppercase px-5">
+      <span>Name</span>
+      {columns && columns?.length > 0 && (
+        <div
+          className={cn('ml-auto flex gap-2 items-center', {
+            'pr-[35px]': withCollapsible,
+          })}
+        >
+          {columns?.map(column => {
+            return (
+              <span
+                className={cn(`flex text-left`)}
+                style={{
+                  minWidth: column.minWidth || DEFAULT_COLUMN_MIN_WIDTH,
+                  maxWidth: column.maxWidth || DEFAULT_COLUMN_MAX_WIDTH,
+                }}
+              >
+                {column.label}
+              </span>
+            );
+          })}
+        </div>
+      )}
+    </li>
   );
 }
 
@@ -163,4 +230,31 @@ export function MainListItem({ item, linkComponent, listColumns = [] }: MainList
       )}
     </li>
   );
+}
+
+{
+  /* <li className="items-center h-table-header border-b-sm border-border1 flex text-icon3 text-[11px] font-normal uppercase px-5">
+        <span>Name</span>
+        {columns && columns?.length > 0 && (
+          <div
+            className={cn('ml-auto flex gap-2 items-center', {
+              'pr-[35px]': items && items.length > 0 && items[0].collapsible,
+            })}
+          >
+            {columns?.map(column => {
+              return (
+                <span
+                  className={cn(`flex text-left`)}
+                  style={{
+                    minWidth: column.minWidth || DEFAULT_COLUMN_MIN_WIDTH,
+                    maxWidth: column.maxWidth || DEFAULT_COLUMN_MAX_WIDTH,
+                  }}
+                >
+                  {column.label}
+                </span>
+              );
+            })}
+          </div>
+        )}
+      </li> */
 }
