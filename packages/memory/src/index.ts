@@ -252,6 +252,8 @@ export class Memory extends MastraMemory {
   }): Promise<StorageThreadType> {
     const config = this.getMergedThreadConfig(memoryConfig || {});
 
+    console.log(`savingThread1`, thread, config);
+
     if (config.workingMemory?.enabled && !thread?.metadata?.workingMemory) {
       // if working memory is enabled but the thread doesn't have it, we need to set it
       let workingMemory = config.workingMemory.template || this.defaultWorkingMemoryTemplate;
@@ -565,6 +567,8 @@ export class Memory extends MastraMemory {
     }
 
     const thread = await this.storage.getThreadById({ threadId });
+
+    console.log(`workingMemoryThread`, thread);
 
     if (format === 'json') {
       try {
