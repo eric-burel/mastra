@@ -252,8 +252,6 @@ export class Memory extends MastraMemory {
   }): Promise<StorageThreadType> {
     const config = this.getMergedThreadConfig(memoryConfig || {});
 
-    console.log(`savingThread1`, thread, config);
-
     if (config.workingMemory?.enabled && !thread?.metadata?.workingMemory) {
       // if working memory is enabled but the thread doesn't have it, we need to set it
       let workingMemory = config.workingMemory.template || this.defaultWorkingMemoryTemplate;
@@ -568,8 +566,6 @@ export class Memory extends MastraMemory {
 
     const thread = await this.storage.getThreadById({ threadId });
 
-    console.log(`workingMemoryThread`, thread);
-
     if (format === 'json') {
       try {
         return JSON.parse(thread?.metadata?.workingMemory as string) || null;
@@ -630,26 +626,6 @@ export class Memory extends MastraMemory {
       template: workingMemoryTemplate,
       data: workingMemoryData,
     });
-  }
-
-  public async getUserContextMessage({ threadId }: { threadId: string }) {
-    const workingMemory = await this.getWorkingMemory({ threadId });
-
-    if (!workingMemory) {
-      return null;
-    }
-
-    return `You have the following information about the user's state and context. It is vital that you use this as the source of truth when generating responses.
-    
-<working_memory>
-${JSON.stringify(workingMemory)}
-</working_memory>
-
-Guidelines:
-- Do not reference or mention this information directly to the user.
-- If conversation history contradicts this information, you must use this information as the source of truth.
-- Only deviate from this information if the user explicitly asks for an update.
-`;
   }
 
   public defaultWorkingMemoryTemplate = `
