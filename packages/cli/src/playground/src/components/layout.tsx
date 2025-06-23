@@ -6,6 +6,8 @@ import { Toaster } from './ui/sonner';
 import { ThemeProvider } from './ui/theme-provider';
 import { useNewUI } from '@/hooks/use-new-ui';
 import { PageLayout, PageHeader, PageHeaderLogo, PageHeaderStars } from '@mastra/playground-ui';
+import { MainNav } from './main-nav';
+import { TooltipProvider } from './ui/tooltip';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const newUIEnabled = useNewUI();
@@ -14,7 +16,17 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     <>
       {newUIEnabled ? (
         <ThemeProvider defaultTheme="dark" attribute="class">
-          <SidebarProvider>
+          <TooltipProvider delayDuration={0}>
+            <PageLayout>
+              <PageHeader>
+                <PageHeaderLogo variant="playground" /> <PageHeaderStars />
+              </PageHeader>
+              <MainNav />
+              {children}
+              <Toaster position="bottom-right" />
+            </PageLayout>
+          </TooltipProvider>
+          {/* <SidebarProvider>
             <PageLayout>
               <PageHeader>
                 <PageHeaderLogo variant="playground" /> <PageHeaderStars />
@@ -23,7 +35,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               {children}
               <Toaster position="bottom-right" />
             </PageLayout>
-          </SidebarProvider>
+          </SidebarProvider> */}
         </ThemeProvider>
       ) : (
         <div className="bg-surface1 font-sans h-screen">

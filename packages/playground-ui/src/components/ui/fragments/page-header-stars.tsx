@@ -24,13 +24,16 @@ export function PageHeaderStars({ className, style }: { className?: string; styl
 
   return githubStarCount && githubStarCount > 0 ? (
     <a
-      className={cn(`group/icon flex items-center gap-2 text-muted-foreground mr-4 p-0`, className)}
+      className={cn(
+        `flex items-center gap-1 text-muted-foreground text-[13px] [&>svg]:w-[16px] [&>svg]:h-[16px]`,
+        className,
+      )}
       style={style}
       href="https://github.com/mastra-ai/mastra"
       target="_blank"
       rel="noopener"
     >
-      <GithubIcon className="h-5 w-5" />
+      <GithubIcon className="w-[20px] h-[20px]" />
 
       {formatToK(githubStarCount)}
     </a>
