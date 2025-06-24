@@ -1,5 +1,11 @@
 # @mastra/core
 
+## 0.10.7-alpha.3
+
+### Patch Changes
+
+- 4efcfa0: Added bail() method and more ergonomic suspend function return value
+
 ## 0.10.7-alpha.2
 
 ### Patch Changes
